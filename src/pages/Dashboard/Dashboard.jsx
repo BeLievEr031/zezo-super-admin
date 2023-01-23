@@ -10,6 +10,7 @@ function Dashboard() {
   const { count } = useSelector((state) => state.user);
   const { isAuthenticated } = useSelector((state) => state.auth);
   useEffect(() => {
+    console.log(isAuthenticated);
     !isAuthenticated ? navigate("/") : "";
     dispatch(fetchCount());
   }, []);

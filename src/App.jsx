@@ -1,7 +1,13 @@
 import "./index.css";
 import React, { useEffect, useState } from "react";
 import Login from "./pages/Auth/Login";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import SideBar from "./components/SideBar/SideBar";
 import Adduser from "./pages/Adduser/Adduser";
 import User from "./pages/User/User";
@@ -13,9 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
-
   const { loading } = useLoadingWithRefresh();
-  // const [loading, setLoading] = useState(false);/
 
   return loading ? (
     <div className="flex items-center justify-center h-screen">Loading...</div>
@@ -26,11 +30,30 @@ function App() {
       </div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          {!isAuthenticated && <Route path="/" element={<Login />} />}
+          {isAuthenticated && (
+            <Route path="/dashboard" element={<Dashboard />} />
+          )}
           {/* <Route path="/adduser" element={<Adduser />} /> */}
-          <Route path="/users" element={<User />} />
-          <Route path="/subscription" element={<Subscription />} />
+          {isAuthenticated && <Route path="/users" element={<User />} />}
+          {isAuthenticated && (
+            <Route path="/subscription" element={<Subscription />} />
+          )}
+
+          <Route
+            path="*"
+            element={
+              <Navigate
+                to={
+                  isAuthenticated
+                    ? user.role === "super"
+                      ? "/dashboard"
+                      : "/"
+                    : "/"
+                }
+              />
+            }
+          />
         </Routes>
       </BrowserRouter>
     </>

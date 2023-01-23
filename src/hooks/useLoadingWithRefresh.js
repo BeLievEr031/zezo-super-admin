@@ -20,7 +20,7 @@ export function useLoadingWithRefresh() {
           }
         );
 
-        console.log(data.refreshToken);
+        // console.log(data.refreshToken);
 
         dispatch(setAuth(data));
         localStorage.setItem("accessToken", data.accessToken);
